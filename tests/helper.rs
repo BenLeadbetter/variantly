@@ -4,17 +4,18 @@ use variantly::Variantly;
 
 /// Validate that complex enum variants can validly expand.
 #[derive(Variantly)]
-pub enum ComplexEnum<'a, A, B>
+pub enum ComplexEnum<'a, A, B, C: 'a + Default + core::convert::From<u8>>
 where
     B: Fn() -> String,
 {
     One((((), ()), ()), ((), ())),
     Two(A, B),
-    Three(&'a ComplexEnum<'a, A, B>),
+    Three(&'a ComplexEnum<'a, A, B, C>),
     Four {
-        first: &'a ComplexEnum<'a, String, B>,
+        first: &'a ComplexEnum<'a, String, B, C>,
         second: &'static str,
     },
+    Five(C),
 }
 
 #[derive(Variantly, Clone)]

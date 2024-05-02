@@ -64,12 +64,11 @@ pub fn derive_variantly_fns(item_enum: ItemEnum) -> Result<TokenStream> {
         });
     });
 
-    let generics = &item_enum.generics;
-    let where_clause = &generics.where_clause;
+    let (impl_generics, type_generics, where_clause) = &item_enum.generics.split_for_impl();
 
     // Declare the actual impl block & iterate over all fns.
     let output: TokenStream = quote! {
-        impl#generics #enum_name#generics #where_clause {
+        impl#impl_generics #enum_name#type_generics #where_clause {
             #(#functions)*
         }
     }
